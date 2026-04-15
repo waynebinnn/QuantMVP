@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quant MVP 回测报告</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --green: #16a34a;
+      --red: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef2ff 0%, var(--bg) 240px);
+      color: var(--text);
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 32px 20px 40px; }
+    .hero { display: flex; flex-wrap: wrap; gap: 18px; align-items: end; justify-content: space-between; margin-bottom: 20px; }
+    h1 { margin: 0; font-size: 32px; letter-spacing: -0.02em; }
+    .subtitle { color: var(--muted); margin-top: 8px; }
+    .meta { color: var(--muted); font-size: 14px; text-align: right; }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; padding: 18px; box-shadow: 0 10px 35px rgba(15, 23, 42, 0.04); }
+    .label { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+    .value { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+    .hint { color: var(--muted); font-size: 12px; margin-top: 8px; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 22px; padding: 18px; box-shadow: 0 12px 40px rgba(15, 23, 42, 0.05); margin-bottom: 20px; }
+    .panel h2 { margin: 0 0 14px; font-size: 18px; }
+    .charts { display: flex; flex-direction: column; gap: 18px; }
+    .chart h3 { margin: 0 0 10px; font-size: 15px; color: var(--muted); font-weight: 600; }
+    .chart img { width: 100%; height: auto; display: block; border-radius: 14px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+    th { color: var(--muted); font-weight: 600; }
+    tr:hover td { background: #f8fafc; }
+    .action.buy { color: var(--green); font-weight: 700; }
+    .action.sell { color: var(--red); font-weight: 700; }
+    .empty { text-align: center; color: var(--muted); padding: 18px 10px; }
+    @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } .meta { text-align: left; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Quant MVP 回测报告</h1>
+        <div class="subtitle">区间 2025-01-02 -&gt; 2026-04-13</div>
+      </div>
+      <div class="meta">
+        <div>初始资金 1,000,000.00</div>
+        <div>结束资金 1,211,572.06</div>
+        <div>总盈亏 +211,572.06</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card"><div class="label">总收益率</div><div class="value">21.16%</div><div class="hint">年化 16.33%</div></div>
+      <div class="card"><div class="label">夏普比率</div><div class="value">0.655</div><div class="hint">年化波动 29.83%</div></div>
+      <div class="card"><div class="label">最大回撤</div><div class="value">-23.47%</div><div class="hint">回撤金额 -320,591.36</div></div>
+      <div class="card"><div class="label">交易次数</div><div class="value">26</div><div class="hint">持仓占比 46.25%</div></div>
+    </div>
+
+    <div class="panel">
+      <h2>曲线总览</h2>
+      <div class="charts">
+        <div class="chart">
+          <h3>股票价格曲线与买卖点（下一根K线生效）</h3>
+          <img src="price_curve.svg" alt="price curve" />
+        </div>
+        <div class="chart">
+          <h3>收益曲线（下一根K线生效）</h3>
+          <img src="return_curve.svg" alt="return curve" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>交易点位</h2>
+      <div style="color: var(--muted); font-size: 13px; margin: -6px 0 12px;">成交价按下一根K线生效后的价格展示。</div>
+      <table>
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>动作</th>
+            <th>成交价</th>
+            <th>仓位变化</th>
+            <th>对应净值</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2025-01-15</td><td class="action buy">BUY</td><td>24.49</td><td>0 -> 1</td><td>996,592.94</td></tr><tr><td>2025-02-13</td><td class="action sell">SELL</td><td>27.92</td><td>1 -> 0</td><td>1,141,781.90</td></tr><tr><td>2025-02-20</td><td class="action buy">BUY</td><td>29.14</td><td>0 -> 1</td><td>1,136,932.19</td></tr><tr><td>2025-02-28</td><td class="action sell">SELL</td><td>28.23</td><td>1 -> 0</td><td>1,117,685.55</td></tr><tr><td>2025-03-18</td><td class="action buy">BUY</td><td>27.60</td><td>0 -> 1</td><td>1,112,283.78</td></tr><tr><td>2025-03-21</td><td class="action sell">SELL</td><td>26.70</td><td>1 -> 0</td><td>1,082,950.70</td></tr><tr><td>2025-04-14</td><td class="action buy">BUY</td><td>21.36</td><td>0 -> 1</td><td>1,066,708.25</td></tr><tr><td>2025-04-16</td><td class="action sell">SELL</td><td>19.80</td><td>1 -> 0</td><td>999,226.54</td></tr><tr><td>2025-04-21</td><td class="action buy">BUY</td><td>21.09</td><td>0 -> 1</td><td>1,016,657.21</td></tr><tr><td>2025-04-28</td><td class="action sell">SELL</td><td>20.35</td><td>1 -> 0</td><td>980,289.98</td></tr><tr><td>2025-04-30</td><td class="action buy">BUY</td><td>20.99</td><td>0 -> 1</td><td>976,405.71</td></tr><tr><td>2025-05-15</td><td class="action sell">SELL</td><td>21.92</td><td>1 -> 0</td><td>1,024,613.24</td></tr><tr><td>2025-05-30</td><td class="action buy">BUY</td><td>21.05</td><td>0 -> 1</td><td>996,479.13</td></tr><tr><td>2025-06-03</td><td class="action sell">SELL</td><td>20.68</td><td>1 -> 0</td><td>993,429.25</td></tr><tr><td>2025-06-05</td><td class="action buy">BUY</td><td>21.41</td><td>0 -> 1</td><td>1,021,263.50</td></tr><tr><td>2025-06-16</td><td class="action sell">SELL</td><td>22.36</td><td>1 -> 0</td><td>1,035,594.33</td></tr><tr><td>2025-06-17</td><td class="action buy">BUY</td><td>23.02</td><td>0 -> 1</td><td>1,021,980.98</td></tr><tr><td>2025-06-23</td><td class="action sell">SELL</td><td>22.71</td><td>1 -> 0</td><td>1,012,385.79</td></tr><tr><td>2025-06-25</td><td class="action buy">BUY</td><td>23.21</td><td>0 -> 1</td><td>1,011,822.82</td></tr><tr><td>2025-07-01</td><td class="action sell">SELL</td><td>22.87</td><td>1 -> 0</td><td>998,958.69</td></tr><tr><td>2025-07-04</td><td class="action buy">BUY</td><td>23.05</td><td>0 -> 1</td><td>982,198.13</td></tr><tr><td>2025-07-07</td><td class="action sell">SELL</td><td>22.09</td><td>1 -> 0</td><td>941,353.91</td></tr><tr><td>2025-07-17</td><td class="action buy">BUY</td><td>23.16</td><td>0 -> 1</td><td>943,190.93</td></tr><tr><td>2025-07-29</td><td class="action sell">SELL</td><td>23.26</td><td>1 -> 0</td><td>947,514.44</td></tr><tr><td>2025-08-07</td><td class="action buy">BUY</td><td>23.37</td><td>0 -> 1</td><td>947,730.25</td></tr><tr><td>2025-08-11</td><td class="action sell">SELL</td><td>23.60</td><td>1 -> 0</td><td>928,908.09</td></tr><tr><td>2025-08-11</td><td class="action buy">BUY</td><td>23.71</td><td>0 -> 1</td><td>932,806.16</td></tr><tr><td>2025-09-02</td><td class="action sell">SELL</td><td>33.18</td><td>1 -> 0</td><td>1,299,986.64</td></tr><tr><td>2025-09-12</td><td class="action buy">BUY</td><td>32.23</td><td>0 -> 1</td><td>1,286,639.04</td></tr><tr><td>2025-09-22</td><td class="action sell">SELL</td><td>33.83</td><td>1 -> 0</td><td>1,295,158.22</td></tr><tr><td>2025-09-22</td><td class="action buy">BUY</td><td>34.83</td><td>0 -> 1</td><td>1,294,161.36</td></tr><tr><td>2025-10-13</td><td class="action sell">SELL</td><td>32.96</td><td>1 -> 0</td><td>1,227,318.81</td></tr><tr><td>2025-10-22</td><td class="action buy">BUY</td><td>32.23</td><td>0 -> 1</td><td>1,219,926.46</td></tr><tr><td>2025-10-31</td><td class="action sell">SELL</td><td>32.50</td><td>1 -> 0</td><td>1,243,829.82</td></tr><tr><td>2025-11-26</td><td class="action buy">BUY</td><td>28.49</td><td>0 -> 1</td><td>1,274,146.77</td></tr><tr><td>2025-12-05</td><td class="action sell">SELL</td><td>30.32</td><td>1 -> 0</td><td>1,295,720.11</td></tr><tr><td>2025-12-24</td><td class="action buy">BUY</td><td>28.84</td><td>0 -> 1</td><td>1,314,967.92</td></tr><tr><td>2025-12-29</td><td class="action sell">SELL</td><td>28.41</td><td>1 -> 0</td><td>1,280,692.21</td></tr><tr><td>2025-12-31</td><td class="action buy">BUY</td><td>29.53</td><td>0 -> 1</td><td>1,278,219.43</td></tr><tr><td>2026-01-14</td><td class="action sell">SELL</td><td>30.61</td><td>1 -> 0</td><td>1,293,921.71</td></tr><tr><td>2026-01-14</td><td class="action buy">BUY</td><td>29.75</td><td>0 -> 1</td><td>1,266,050.90</td></tr><tr><td>2026-01-20</td><td class="action sell">SELL</td><td>29.41</td><td>1 -> 0</td><td>1,245,840.46</td></tr><tr><td>2026-02-06</td><td class="action buy">BUY</td><td>26.34</td><td>0 -> 1</td><td>1,235,210.80</td></tr><tr><td>2026-02-12</td><td class="action sell">SELL</td><td>26.30</td><td>1 -> 0</td><td>1,237,794.08</td></tr><tr><td>2026-02-24</td><td class="action buy">BUY</td><td>26.68</td><td>0 -> 1</td><td>1,234,309.67</td></tr><tr><td>2026-03-02</td><td class="action sell">SELL</td><td>26.39</td><td>1 -> 0</td><td>1,222,507.91</td></tr><tr><td>2026-03-11</td><td class="action buy">BUY</td><td>25.51</td><td>0 -> 1</td><td>1,208,919.64</td></tr><tr><td>2026-03-16</td><td class="action sell">SELL</td><td>25.07</td><td>1 -> 0</td><td>1,190,097.47</td></tr><tr><td>2026-04-02</td><td class="action buy">BUY</td><td>22.78</td><td>0 -> 1</td><td>1,189,337.37</td></tr><tr><td>2026-04-03</td><td class="action sell">SELL</td><td>22.33</td><td>1 -> 0</td><td>1,161,446.03</td></tr><tr><td>2026-04-08</td><td class="action buy">BUY</td><td>23.38</td><td>0 -> 1</td><td>1,173,679.27</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

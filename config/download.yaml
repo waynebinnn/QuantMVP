@@ -1,0 +1,9 @@
+symbol: "000938"
+period: 60min
+start_date: "2025-01-01"
+end_date: "2026-04-14"
+adjust: qfq
+output_path: data/
+retries: 3
+chunk_days: 5
+timestamp_mode: end

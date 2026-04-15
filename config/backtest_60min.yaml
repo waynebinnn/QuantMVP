@@ -1,0 +1,22 @@
+data:
+  csv_path: data/002241/stock_002241_60min.csv
+  datetime_col: datetime
+
+report:
+  output_dir: artifacts
+
+strategy:
+  name: sma_cross
+  mode: 60min
+  hourly60_fast_window: 5
+  hourly60_slow_window: 20
+  hourly60_confirm_bars: 1
+  hourly60_trend_window: 30
+
+cost:
+  fee_bps: 1.0
+  slippage_bps: 1.0
+
+backtest:
+  initial_capital: 1000000
+  hourly60_periods_per_year: 968
