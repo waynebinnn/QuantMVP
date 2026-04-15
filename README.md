@@ -113,6 +113,24 @@ symbol: "002625"
 - `artifacts/{symbol}/60min/return_curve.svg`
 - `artifacts/{symbol}/60min/report.html`
 
+## 结果展示（artifacts）
+
+当前结果目录：`/Users/binnn/workspace/量化/artifacts`
+
+可在 README 中直接点击查看：
+
+### 000938（60min）
+
+- [HTML 报告](artifacts/000938/60min/report.html)
+
+### 002241（60min）
+
+- [HTML 报告](artifacts/002241/60min/report.html)
+
+### 002625（60min）
+
+- [HTML 报告](artifacts/002625/60min/report.html)
+
 ## 策略说明（当前实现）
 
 策略文件：`src/quant_mvp/strategy/sma_cross.py`
@@ -190,5 +208,5 @@ symbol: "002625"
 
 ## TODO / 当前问题
 
-### Daily 数据下载稳定性问题（进行中）
-daily数据下载存在问题，暂时不修复了。。。
+- Daily 数据下载稳定性问题（进行中）
+- 策略并未进行优化改善
