@@ -1,15 +1,11 @@
 # Quant Trading MVP
 
-一个以 YAML 配置驱动的量化回测小玩具，当前支持：
-
-- 日线回测（daily）
-- 60 分钟回测（60min）
-- A 股日线/60 分钟数据下载（含多源回退与重试）
+一个以 YAML 配置驱动的量化回测小玩具，当前仅支持 60 分钟级别（60min）。
 
 ## 功能概览
 
 - CSV 行情加载与字段校验
-- SMA 状态机策略（daily / 60min 双模式）
+- SMA 状态机策略（60min）
 - 向量化回测引擎
 - 绩效指标：收益率、年化、Sharpe、最大回撤、交易次数等
 - SVG 图表与 HTML 报告
@@ -36,13 +32,7 @@ pip install -r requirements.txt
 python scripts/download_stock_data.py --config config/download.yaml
 ```
 
-2. 跑日线回测
-
-```bash
-python scripts/run_backtest.py --config config/backtest_daily.yaml
-```
-
-3. 跑 60 分钟回测
+2. 跑 60 分钟回测
 
 ```bash
 python scripts/run_backtest.py --config config/backtest_60min.yaml
@@ -52,14 +42,12 @@ python scripts/run_backtest.py --config config/backtest_60min.yaml
 
 ### 回测配置
 
-- `config/backtest_daily.yaml`：日线回测
 - `config/backtest_60min.yaml`：60 分钟回测
 
 关键项：
 
 - `data.csv_path`：回测数据 CSV
-- `strategy.mode`：`daily` 或 `60min`
-- `backtest.periods_per_year`：日线年化周期（常用 252）
+- `strategy.mode`：固定为 `60min`
 - `backtest.hourly60_periods_per_year`：60min 年化周期（常用 968）
 
 ### 下载配置
@@ -69,7 +57,7 @@ python scripts/run_backtest.py --config config/backtest_60min.yaml
 关键项：
 
 - `symbol`
-- `period`：`daily` 或 `60min`
+- `period`：固定为 `60min`
 - `start_date` / `end_date`
 - `adjust`：`qfq` / `hfq` / `none`
 - `retries`
@@ -93,21 +81,15 @@ symbol: "002625"
 
 当 `output_path` 是目录（例如 `data/`）或为空时：
 
-- daily: `data/{symbol}/stock_{symbol}_day.csv`
-- 60min: `data/{symbol}/stock_{symbol}_60min.csv`
+- `data/{symbol}/stock_{symbol}_60min.csv`
 
 例如 symbol 为 002241：
 
-- `data/002241/stock_002241_day.csv`
 - `data/002241/stock_002241_60min.csv`
 
 ### 回测输出
 
-回测输出目录按 `symbol/mode` 自动分层，避免 daily 与 60min 互相覆盖：
-
-- `artifacts/{symbol}/daily/price_curve.svg`
-- `artifacts/{symbol}/daily/return_curve.svg`
-- `artifacts/{symbol}/daily/report.html`
+回测输出目录按 `symbol/mode` 自动分层：
 
 - `artifacts/{symbol}/60min/price_curve.svg`
 - `artifacts/{symbol}/60min/return_curve.svg`
@@ -135,30 +117,16 @@ symbol: "002625"
 
 策略文件：`src/quant_mvp/strategy/sma_cross.py`
 
-- `SMACrossDailyStrategy`
 - `SMACross60MinuteStrategy`
 
-共同逻辑：
+核心逻辑：
 
 - 快慢均线关系 + 价格相对均线位置
 - 连续确认 `confirm_bars`
 - 状态机持仓切换（0/1）
-
-差异：
-
-- daily 默认开启趋势斜率约束
-- 60min 默认不启用趋势斜率约束
+- 可选量能过滤（`hourly60_use_volume_filter`）
 
 ## 下载机制与回退顺序
-
-### daily
-
-1. Eastmoney（日线，按 `chunk_days` 分片 + 失败递归切分）
-2. Tencent（`stock_zh_a_hist_tx`）
-3. Tencent raw adjust 重试
-4. Sina（`stock_zh_a_daily`）
-
-### 60min
 
 1. Eastmoney（`stock_zh_a_hist_min_em`）
 2. Sina（`stock_zh_a_minute`）
@@ -198,7 +166,6 @@ symbol: "002625"
 
 - `scripts/download_stock_data.py`：数据下载入口
 - `scripts/run_backtest.py`：回测入口
-- `config/backtest_daily.yaml`：日线回测配置
 - `config/backtest_60min.yaml`：60 分钟回测配置
 - `config/download.yaml`：下载配置
 - `src/quant_mvp/backtest`：回测引擎
@@ -208,5 +175,4 @@ symbol: "002625"
 
 ## TODO / 当前问题
 
-- Daily 数据下载稳定性问题（进行中）
 - 策略并未进行优化改善

@@ -16,7 +16,7 @@ from quant_mvp.data.csv_loader import load_ohlcv_csv
 from quant_mvp.report.html import save_backtest_report
 from quant_mvp.report.metrics import calculate_metrics
 from quant_mvp.report.plots import save_price_chart, save_return_chart
-from quant_mvp.strategy.sma_cross import SMACross60MinuteStrategy, SMACrossDailyStrategy
+from quant_mvp.strategy.sma_cross import SMACross60MinuteStrategy
 
 
 def resolve_symbol_from_csv_path(csv_path: str) -> str:
@@ -31,17 +31,6 @@ def build_strategy(name: str, mode: str, cfg_strategy):
     if name != "sma_cross":
         raise ValueError(f"Unsupported strategy: {name}")
 
-    if mode == "daily":
-        return SMACrossDailyStrategy(
-            fast_window=cfg_strategy.daily_fast_window,
-            slow_window=cfg_strategy.daily_slow_window,
-            confirm_bars=cfg_strategy.daily_confirm_bars,
-            trend_window=cfg_strategy.daily_trend_window,
-            use_volume_filter=cfg_strategy.daily_use_volume_filter,
-            volume_window=cfg_strategy.daily_volume_window,
-            volume_multiplier=cfg_strategy.daily_volume_multiplier,
-        )
-
     if mode == "60min":
         return SMACross60MinuteStrategy(
             fast_window=cfg_strategy.hourly60_fast_window,
@@ -53,15 +42,15 @@ def build_strategy(name: str, mode: str, cfg_strategy):
             volume_multiplier=cfg_strategy.hourly60_volume_multiplier,
         )
 
-    raise ValueError(f"Unsupported strategy mode: {mode}. Use 'daily' or '60min'.")
+    raise ValueError(f"Unsupported strategy mode: {mode}. Only '60min' is supported.")
 
 
 def resolve_periods_per_year(cfg, mode: str, override: int | None) -> int:
     if override is not None:
         return override
-    if mode == "60min":
-        return cfg.backtest.hourly60_periods_per_year
-    return cfg.backtest.periods_per_year
+    if mode != "60min":
+        raise ValueError(f"Unsupported strategy mode: {mode}. Only '60min' is supported.")
+    return cfg.backtest.hourly60_periods_per_year
 
 
 

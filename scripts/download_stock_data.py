@@ -81,63 +81,6 @@ def _download_intraday_bars_chunked(
     return pd.concat(chunks, ignore_index=True)
 
 
-def _download_daily_bars_chunked(
-    ak,
-    symbol: str,
-    start_date: str,
-    end_date: str,
-    adjust: str,
-    retries: int,
-    chunk_days: int,
-) -> pd.DataFrame:
-    if chunk_days <= 0:
-        raise ValueError("chunk_days must be positive")
-
-    start_ts = pd.to_datetime(start_date).normalize()
-    end_ts = pd.to_datetime(end_date).normalize()
-    if start_ts > end_ts:
-        raise ValueError("start_date must be earlier than or equal to end_date")
-
-    def _fetch_range(left: pd.Timestamp, right: pd.Timestamp) -> list[pd.DataFrame]:
-        chunk_start_str = left.strftime("%Y%m%d")
-        chunk_end_str = right.strftime("%Y%m%d")
-        try:
-            chunk_df = _call_with_retry(
-                lambda: ak.stock_zh_a_hist(
-                    symbol=symbol,
-                    period="daily",
-                    start_date=chunk_start_str,
-                    end_date=chunk_end_str,
-                    adjust=adjust,
-                    timeout=20,
-                ),
-                retries=retries,
-            )
-            return [chunk_df] if not chunk_df.empty else []
-        except Exception as exc:
-            if left >= right:
-                print(f"[warn] Skip failed daily slice {chunk_start_str}-{chunk_end_str}: {exc}")
-                return []
-            mid = left + (right - left) / 2
-            mid = pd.Timestamp(mid).normalize()
-            left_chunks = _fetch_range(left, mid)
-            right_start = mid + pd.Timedelta(days=1)
-            right_chunks = _fetch_range(right_start, right)
-            return left_chunks + right_chunks
-
-    chunks: list[pd.DataFrame] = []
-    cursor = start_ts
-    while cursor <= end_ts:
-        chunk_end = min(cursor + pd.Timedelta(days=chunk_days - 1), end_ts)
-        chunks.extend(_fetch_range(cursor, chunk_end))
-
-        cursor = chunk_end + pd.Timedelta(days=1)
-
-    if not chunks:
-        raise ValueError(f"No data returned for symbol={symbol}")
-    return pd.concat(chunks, ignore_index=True)
-
-
 def _to_sina_symbol(symbol: str) -> str:
     normalized = symbol.lower()
     if normalized.startswith("sh") or normalized.startswith("sz"):
@@ -223,102 +166,26 @@ def download_a_share_bars(
 ) -> pd.DataFrame:
     ak = _load_akshare()
 
-    if period not in {"daily", "60min"}:
-        raise ValueError("download.period must be 'daily' or '60min' in the config file")
+    if period != "60min":
+        raise ValueError("download.period must be '60min' in the config file")
 
-    if period == "daily":
+    ak_period = "60"
+    try:
+        df = _download_intraday_bars_chunked(
+            ak=ak,
+            symbol=symbol,
+            period=ak_period,
+            start_date=start_date,
+            end_date=end_date,
+            adjust=adjust,
+            retries=retries,
+            chunk_days=chunk_days,
+        )
+    except Exception as em_exc:
+        print(f"[warn] Eastmoney intraday API failed: {em_exc}")
+        print("[warn] Falling back to Sina intraday API...")
         try:
-            df = _download_daily_bars_chunked(
-                ak=ak,
-                symbol=symbol,
-                start_date=start_date,
-                end_date=end_date,
-                adjust=adjust,
-                retries=retries,
-                chunk_days=chunk_days,
-            )
-        except Exception as em_exc:
-            print(f"[warn] Eastmoney daily API failed: {em_exc}")
-            market_symbol = _to_sina_symbol(symbol)
-            try:
-                print("[warn] Falling back to Tencent daily API...")
-                df = _call_with_retry(
-                    lambda: ak.stock_zh_a_hist_tx(
-                        symbol=market_symbol,
-                        start_date=start_date.replace("-", ""),
-                        end_date=end_date.replace("-", ""),
-                        adjust=adjust,
-                        timeout=20,
-                    ),
-                    retries=retries,
-                )
-            except Exception as tx_exc:
-                print(f"[warn] Tencent daily API failed: {tx_exc}")
-                try:
-                    print("[warn] Retrying Tencent daily API with raw adjust...")
-                    df = _call_with_retry(
-                        lambda: ak.stock_zh_a_hist_tx(
-                            symbol=market_symbol,
-                            start_date=start_date.replace("-", ""),
-                            end_date=end_date.replace("-", ""),
-                            adjust="",
-                            timeout=20,
-                        ),
-                        retries=retries,
-                    )
-                except Exception as tx_raw_exc:
-                    print(f"[warn] Tencent raw-adjust daily API failed: {tx_raw_exc}")
-                    print("[warn] Falling back to Sina daily API...")
-                    try:
-                        df = _call_with_retry(
-                            lambda: ak.stock_zh_a_daily(
-                                symbol=market_symbol,
-                                start_date=start_date.replace("-", ""),
-                                end_date=end_date.replace("-", ""),
-                                adjust=_to_sina_adjust(adjust),
-                            ),
-                            retries=retries,
-                        )
-                    except Exception as sina_exc:
-                        raise RuntimeError(
-                            "All daily data sources failed: "
-                            f"eastmoney={em_exc}; tencent={tx_exc}; tencent_raw={tx_raw_exc}; sina={sina_exc}"
-                        ) from sina_exc
-        rename_map = {
-            "日期": "datetime",
-            "date": "datetime",
-            "Date": "datetime",
-            "开盘": "open",
-            "open": "open",
-            "Open": "open",
-            "收盘": "close",
-            "close": "close",
-            "Close": "close",
-            "最高": "high",
-            "high": "high",
-            "High": "high",
-            "最低": "low",
-            "low": "low",
-            "Low": "low",
-            "成交量": "volume",
-            "volume": "volume",
-            "Volume": "volume",
-            "成交额": "amount",
-            "amount": "amount",
-            "Amount": "amount",
-            "振幅": "amplitude_pct",
-            "amplitude_pct": "amplitude_pct",
-            "涨跌幅": "pct_change",
-            "pct_change": "pct_change",
-            "涨跌额": "change_amount",
-            "change_amount": "change_amount",
-            "换手率": "turnover_rate_pct",
-            "turnover_rate_pct": "turnover_rate_pct",
-        }
-    else:
-        ak_period = "60"
-        try:
-            df = _download_intraday_bars_chunked(
+            df = _download_intraday_bars_sina(
                 ak=ak,
                 symbol=symbol,
                 period=ak_period,
@@ -326,43 +193,30 @@ def download_a_share_bars(
                 end_date=end_date,
                 adjust=adjust,
                 retries=retries,
-                chunk_days=chunk_days,
             )
-        except Exception as em_exc:
-            print(f"[warn] Eastmoney intraday API failed: {em_exc}")
-            print("[warn] Falling back to Sina intraday API...")
-            try:
-                df = _download_intraday_bars_sina(
-                    ak=ak,
-                    symbol=symbol,
-                    period=ak_period,
-                    start_date=start_date,
-                    end_date=end_date,
-                    adjust=adjust,
-                    retries=retries,
-                )
-            except Exception as sina_exc:
-                raise RuntimeError(
-                    "All intraday data sources failed: "
-                    f"eastmoney={em_exc}; sina={sina_exc}"
-                ) from sina_exc
-        rename_map = {
-            "时间": "datetime",
-            "开盘": "open",
-            "收盘": "close",
-            "最高": "high",
-            "最低": "low",
-            "成交量": "volume",
-            "成交额": "amount",
-            "均价": "vwap",
-            "datetime": "datetime",
-            "open": "open",
-            "close": "close",
-            "high": "high",
-            "low": "low",
-            "volume": "volume",
-            "amount": "amount",
-        }
+        except Exception as sina_exc:
+            raise RuntimeError(
+                "All intraday data sources failed: "
+                f"eastmoney={em_exc}; sina={sina_exc}"
+            ) from sina_exc
+
+    rename_map = {
+        "时间": "datetime",
+        "开盘": "open",
+        "收盘": "close",
+        "最高": "high",
+        "最低": "low",
+        "成交量": "volume",
+        "成交额": "amount",
+        "均价": "vwap",
+        "datetime": "datetime",
+        "open": "open",
+        "close": "close",
+        "high": "high",
+        "low": "low",
+        "volume": "volume",
+        "amount": "amount",
+    }
 
     if df.empty:
         raise ValueError(f"No data returned for symbol={symbol}")
@@ -384,9 +238,8 @@ def download_a_share_bars(
     result.insert(2, "adjust", adjust)
     result["datetime"] = pd.to_datetime(result["datetime"])
 
-    if period != "daily" and timestamp_mode == "start":
-        bar_minutes = 60 if period == "60min" else int(period)
-        result["datetime"] = result["datetime"] - pd.to_timedelta(bar_minutes, unit="m")
+    if timestamp_mode == "start":
+        result["datetime"] = result["datetime"] - pd.to_timedelta(60, unit="m")
 
     result = result.sort_values("datetime").reset_index(drop=True)
 
@@ -413,13 +266,9 @@ def download_a_share_bars(
     return result
 
 
-def download_a_share_daily(symbol: str, start_date: str, end_date: str) -> pd.DataFrame:
-    return download_a_share_bars(symbol=symbol, period="daily", start_date=start_date, end_date=end_date, adjust="qfq")
-
-
-def _resolve_output_path(output_path: str, symbol: str, period: str) -> Path:
+def _resolve_output_path(output_path: str, symbol: str) -> Path:
     base_output = output_path.strip() if output_path else ""
-    period_suffix = "60min" if period == "60min" else "day"
+    period_suffix = "60min"
     auto_filename = f"stock_{symbol}_{period_suffix}.csv"
 
     if not base_output:
@@ -437,8 +286,8 @@ def _resolve_output_path(output_path: str, symbol: str, period: str) -> Path:
     return path
 
 
-def _try_load_local_cache(symbol: str, period: str) -> pd.DataFrame | None:
-    period_suffix = "60min" if period == "60min" else "day"
+def _try_load_local_cache(symbol: str) -> pd.DataFrame | None:
+    period_suffix = "60min"
     candidates = sorted(Path("data").glob(f"**/stock_{symbol}_{period_suffix}.csv"))
     if not candidates:
         return None
@@ -454,7 +303,7 @@ def _try_load_local_cache(symbol: str, period: str) -> pd.DataFrame | None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Download A-share daily or 60-minute data from config to CSV")
+    parser = argparse.ArgumentParser(description="Download A-share 60-minute data from config to CSV")
     parser.add_argument("--config", required=True, help="Path to YAML config")
     args = parser.parse_args()
 
@@ -484,12 +333,12 @@ def main() -> None:
             timestamp_mode=download.timestamp_mode,
         )
     except Exception as exc:
-        cached = _try_load_local_cache(symbol, download.period)
+        cached = _try_load_local_cache(symbol)
         if cached is None:
             raise
         print(f"[warn] Download failed, fallback to cache: {exc}")
         df = cached
-    output_path = _resolve_output_path(download.output_path, symbol, download.period)
+    output_path = _resolve_output_path(download.output_path, symbol)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False)
     print(f"Saved {len(df)} rows to {output_path}")

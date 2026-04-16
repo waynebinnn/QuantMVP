@@ -16,7 +16,6 @@ class CostConfig:
 @dataclass(slots=True)
 class BacktestConfig:
     initial_capital: float = 1_000_000.0
-    periods_per_year: int = 252
     hourly60_periods_per_year: int = 968
 
 
@@ -34,7 +33,7 @@ class ReportConfig:
 @dataclass(slots=True)
 class DownloadConfig:
     symbol: str = ""
-    period: str = "daily"
+    period: str = "60min"
     start_date: str = ""
     end_date: str = ""
     adjust: str = "qfq"
@@ -47,14 +46,7 @@ class DownloadConfig:
 @dataclass(slots=True)
 class StrategyConfig:
     name: str = "sma_cross"
-    mode: str = "daily"
-    daily_fast_window: int = 5
-    daily_slow_window: int = 20
-    daily_confirm_bars: int = 2
-    daily_trend_window: int = 30
-    daily_use_volume_filter: bool = False
-    daily_volume_window: int = 20
-    daily_volume_multiplier: float = 1.1
+    mode: str = "60min"
     hourly60_fast_window: int = 5
     hourly60_slow_window: int = 20
     hourly60_confirm_bars: int = 1

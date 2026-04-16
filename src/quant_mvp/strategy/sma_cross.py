@@ -29,7 +29,6 @@ def _stateful_sma_signal(
     slow_window: int,
     confirm_bars: int,
     trend_window: int,
-    require_trend_slope: bool,
     volume: pd.Series | None = None,
     use_volume_filter: bool = False,
     volume_window: int = 20,
@@ -41,10 +40,6 @@ def _stateful_sma_signal(
 
     bullish = (fast_ma > slow_ma) & (close > slow_ma) & (close > trend_ma)
     bearish = (fast_ma < slow_ma) & (close < slow_ma) & (close < trend_ma)
-
-    if require_trend_slope:
-        bullish = bullish & (trend_ma > trend_ma.shift(1))
-        bearish = bearish & (trend_ma < trend_ma.shift(1))
 
     if use_volume_filter:
         if volume is None:
@@ -67,45 +62,6 @@ def _stateful_sma_signal(
         positions.append(current_position)
 
     return pd.Series(positions, index=close.index, dtype=float)
-
-
-class SMACrossDailyStrategy(Strategy):
-    def __init__(
-        self,
-        fast_window: int = 5,
-        slow_window: int = 20,
-        confirm_bars: int = 2,
-        trend_window: int = 30,
-        use_volume_filter: bool = False,
-        volume_window: int = 20,
-        volume_multiplier: float = 1.1,
-    ) -> None:
-        _validate_windows(fast_window, slow_window, confirm_bars, trend_window)
-        if use_volume_filter:
-            _validate_volume_filter(volume_window, volume_multiplier)
-        self.fast_window = fast_window
-        self.slow_window = slow_window
-        self.confirm_bars = confirm_bars
-        self.trend_window = trend_window
-        self.use_volume_filter = use_volume_filter
-        self.volume_window = volume_window
-        self.volume_multiplier = volume_multiplier
-
-    def generate_signals(self, data: pd.DataFrame) -> pd.Series:
-        close = data["close"]
-        volume = data.get("volume")
-        return _stateful_sma_signal(
-            close=close,
-            fast_window=self.fast_window,
-            slow_window=self.slow_window,
-            confirm_bars=self.confirm_bars,
-            trend_window=self.trend_window,
-            require_trend_slope=True,
-            volume=volume,
-            use_volume_filter=self.use_volume_filter,
-            volume_window=self.volume_window,
-            volume_multiplier=self.volume_multiplier,
-        )
 
 
 class SMACross60MinuteStrategy(Strategy):
@@ -139,7 +95,6 @@ class SMACross60MinuteStrategy(Strategy):
             slow_window=self.slow_window,
             confirm_bars=self.confirm_bars,
             trend_window=self.trend_window,
-            require_trend_slope=False,
             volume=volume,
             use_volume_filter=self.use_volume_filter,
             volume_window=self.volume_window,
