@@ -32,8 +32,10 @@ def run_backtest(
     signal = strategy.generate_signals(data).clip(lower=0.0, upper=1.0)
     signal.index = indexed_data.index
 
+    # Signal at bar t is executed on bar t+1 open, so position[t] is active for t->t+1.
     position = signal.shift(1).fillna(0.0)
-    asset_ret = indexed_data["close"].pct_change().fillna(0.0)
+    open_price = indexed_data["open"]
+    asset_ret = (open_price.shift(-1) / open_price - 1.0).fillna(0.0)
 
     gross_ret = position * asset_ret
 

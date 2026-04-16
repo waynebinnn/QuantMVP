@@ -23,7 +23,7 @@ class PerformanceMetrics:
     max_drawdown_amount: float
     avg_turnover: float
     invested_ratio: float
-    positive_day_ratio: float
+    positive_bar_ratio: float
     trade_count: int
 
 
@@ -58,7 +58,7 @@ def calculate_metrics(
     max_dd_amount = _max_drawdown_amount(result.equity_curve)
     avg_turnover = float(result.turnover.mean())
     invested_ratio = float((result.position > 0).mean())
-    positive_day_ratio = float((result.returns > 0).mean())
+    positive_bar_ratio = float((result.returns > 0).mean())
     trade_count = int((result.position.diff() > 0).sum())
 
     return PerformanceMetrics(
@@ -75,6 +75,6 @@ def calculate_metrics(
         max_drawdown_amount=max_dd_amount,
         avg_turnover=avg_turnover,
         invested_ratio=invested_ratio,
-        positive_day_ratio=positive_day_ratio,
+        positive_bar_ratio=positive_bar_ratio,
         trade_count=trade_count,
     )

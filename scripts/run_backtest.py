@@ -108,7 +108,7 @@ def main() -> None:
     print("=== 交易与持仓 ===")
     print(f"交易次数: {metrics.trade_count}")
     print(f"持仓占比: {metrics.invested_ratio:.2%}")
-    print(f"上涨日占比: {metrics.positive_day_ratio:.2%}")
+    print(f"上涨Bar占比: {metrics.positive_bar_ratio:.2%}")
     print(f"平均换手率: {metrics.avg_turnover:.4f}")
 
     symbol = resolve_symbol_from_csv_path(cfg.data.csv_path)

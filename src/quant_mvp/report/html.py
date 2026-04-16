@@ -127,11 +127,11 @@ def save_backtest_report(
       <h2>曲线总览</h2>
       <div class="charts">
         <div class="chart">
-          <h3>股票价格曲线与买卖点（下一根K线生效）</h3>
+          <h3>股票价格曲线与买卖点（下一根开盘成交）</h3>
           <img src="{escape(price_chart_name)}" alt="price curve" />
         </div>
         <div class="chart">
-          <h3>收益曲线（下一根K线生效）</h3>
+          <h3>收益曲线（按开盘到开盘收益计算）</h3>
           <img src="{escape(return_chart_name)}" alt="return curve" />
         </div>
       </div>
@@ -139,7 +139,7 @@ def save_backtest_report(
 
     <div class="panel">
       <h2>交易点位</h2>
-      <div style="color: var(--muted); font-size: 13px; margin: -6px 0 12px;">成交价按下一根K线生效后的价格展示。</div>
+      <div style="color: var(--muted); font-size: 13px; margin: -6px 0 12px;">成交价按下一根开盘价展示，对应净值为成交前时点净值。</div>
       <table>
         <thead>
           <tr>

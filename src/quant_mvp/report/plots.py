@@ -156,7 +156,7 @@ def save_price_chart(
     output_dir: str | Path,
 ) -> Path:
     output_path = Path(output_dir) / "price_curve.svg"
-    subtitle = f"区间 {result.start_datetime:%Y-%m-%d} -> {result.end_datetime:%Y-%m-%d} | 股票价格曲线与买卖点（下一根K线生效）"
+    subtitle = f"区间 {result.start_datetime:%Y-%m-%d} -> {result.end_datetime:%Y-%m-%d} | 股票价格曲线与买卖点（下一根开盘成交）"
     return _build_timeseries_svg(
         result.price_curve,
         metrics,
@@ -178,7 +178,7 @@ def save_return_chart(
 ) -> Path:
     output_path = Path(output_dir) / "return_curve.svg"
     cumulative_return = result.equity_curve / result.initial_capital - 1.0
-    subtitle = f"区间 {result.start_datetime:%Y-%m-%d} -> {result.end_datetime:%Y-%m-%d} | 累计收益曲线（下一根K线生效）"
+    subtitle = f"区间 {result.start_datetime:%Y-%m-%d} -> {result.end_datetime:%Y-%m-%d} | 累计收益曲线（按开盘到开盘收益计算）"
     return _build_timeseries_svg(
         cumulative_return,
         metrics,

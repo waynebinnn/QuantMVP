@@ -302,6 +302,40 @@ def _try_load_local_cache(symbol: str) -> pd.DataFrame | None:
     return cached
 
 
+def _slice_cache_for_requested_range(
+    cached: pd.DataFrame,
+    start_date: str,
+    end_date: str,
+) -> pd.DataFrame:
+    if "datetime" not in cached.columns:
+        raise ValueError("cache file missing required 'datetime' column")
+
+    start_ts = pd.to_datetime(start_date)
+    end_ts = pd.to_datetime(end_date)
+
+    normalized = cached.copy()
+    normalized["datetime"] = pd.to_datetime(normalized["datetime"], errors="coerce")
+    normalized = normalized.dropna(subset=["datetime"]).sort_values("datetime")
+    normalized = normalized.drop_duplicates(subset=["datetime"]).reset_index(drop=True)
+
+    if normalized.empty:
+        raise ValueError("cache file has no valid datetime rows")
+
+    cache_start = pd.Timestamp(normalized["datetime"].iloc[0])
+    cache_end = pd.Timestamp(normalized["datetime"].iloc[-1])
+    if cache_start > start_ts or cache_end < end_ts:
+        raise ValueError(
+            f"cache range insufficient: cache={cache_start:%Y-%m-%d %H:%M:%S}..{cache_end:%Y-%m-%d %H:%M:%S}, "
+            f"requested={start_ts:%Y-%m-%d %H:%M:%S}..{end_ts:%Y-%m-%d %H:%M:%S}"
+        )
+
+    sliced = normalized[(normalized["datetime"] >= start_ts) & (normalized["datetime"] <= end_ts)].reset_index(drop=True)
+    if sliced.empty:
+        raise ValueError("cache has no rows in requested date range")
+
+    return sliced
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Download A-share 60-minute data from config to CSV")
     parser.add_argument("--config", required=True, help="Path to YAML config")
@@ -336,8 +370,11 @@ def main() -> None:
         cached = _try_load_local_cache(symbol)
         if cached is None:
             raise
-        print(f"[warn] Download failed, fallback to cache: {exc}")
-        df = cached
+        try:
+            df = _slice_cache_for_requested_range(cached, download.start_date, download.end_date)
+        except Exception as cache_exc:
+            raise RuntimeError(f"Download failed and cache fallback is invalid: download={exc}; cache={cache_exc}") from cache_exc
+        print(f"[warn] Download failed, fallback to validated cache slice: {exc}")
     output_path = _resolve_output_path(download.output_path, symbol)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False)
