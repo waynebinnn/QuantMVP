@@ -21,7 +21,7 @@
 <text x="1088" y="442" font-size="12" fill="#64748b">2026-04-13</text>
 <text x="8" y="112" font-size="12" fill="#64748b">57.58</text>
 <text x="8" y="418" font-size="12" fill="#64748b">33.40</text>
-<g><circle cx="121.4" cy="309.6" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="129.4" y="299.6" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
+<g><circle cx="122.3" cy="305.1" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="130.3" y="295.1" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="145.8" cy="324.8" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="153.8" y="342.8" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
 <g><circle cx="158.9" cy="290.8" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="166.9" y="280.8" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="170.2" cy="305.6" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="178.2" y="323.6" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
@@ -35,26 +35,22 @@
 <g><circle cx="381.3" cy="305.2" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="389.3" y="323.2" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
 <g><circle cx="408.3" cy="300.5" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="416.3" y="290.5" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="431.0" cy="331.7" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="439.0" y="349.7" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
-<g><circle cx="483.3" cy="347.9" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="491.3" y="337.9" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
+<g><circle cx="485.9" cy="347.7" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="493.9" y="337.7" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="506.0" cy="344.6" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="514.0" y="362.6" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
 <g><circle cx="510.3" cy="338.3" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="518.3" y="328.3" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="525.2" cy="338.9" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="533.2" y="356.9" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
-<g><circle cx="528.6" cy="332.9" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="536.6" y="322.9" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
+<g><circle cx="531.3" cy="323.2" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="539.3" y="313.2" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="540.0" cy="336.7" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="548.0" y="354.7" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
 <g><circle cx="562.6" cy="335.9" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="570.6" y="325.9" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="581.0" cy="330.7" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="589.0" y="348.7" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
-<g><circle cx="586.2" cy="312.8" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="594.2" y="302.8" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
+<g><circle cx="587.1" cy="314.5" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="595.1" y="304.5" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="612.4" cy="293.1" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="620.4" y="311.1" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
-<g><circle cx="616.7" cy="251.3" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="624.7" y="241.3" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
+<g><circle cx="618.5" cy="226.4" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="626.5" y="216.4" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="656.8" cy="179.8" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="664.8" y="197.8" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
 <g><circle cx="684.7" cy="234.7" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="692.7" y="224.7" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="703.9" cy="242.0" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="711.9" y="260.0" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
-<g><circle cx="713.5" cy="211.7" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="721.5" y="201.7" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
+<g><circle cx="716.1" cy="194.3" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="724.1" y="184.3" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="736.2" cy="213.4" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="744.2" y="231.4" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
-<g><circle cx="774.6" cy="249.9" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="782.6" y="239.9" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
-<g><circle cx="778.9" cy="255.8" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="786.9" y="273.8" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
-<g><circle cx="791.1" cy="227.4" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="799.1" y="217.4" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
-<g><circle cx="795.5" cy="268.2" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="803.5" y="286.2" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
 <g><circle cx="827.8" cy="293.1" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="835.8" y="283.1" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="840.8" cy="283.3" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="848.8" y="301.3" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
 <g><circle cx="841.7" cy="281.0" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="849.7" y="271.0" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
@@ -63,8 +59,8 @@
 <g><circle cx="929.8" cy="194.5" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="937.8" y="212.5" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
 <g><circle cx="949.8" cy="191.3" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="957.8" y="181.3" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="965.5" cy="169.3" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="973.5" y="187.3" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
-<g><circle cx="1029.2" cy="237.8" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="1037.2" y="227.8" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
+<g><circle cx="1030.1" cy="236.6" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="1038.1" y="226.6" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
 <g><circle cx="1061.5" cy="242.5" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" /><text x="1069.5" y="260.5" font-size="11" font-weight="700" fill="#dc2626">SELL</text></g>
-<g><circle cx="1150.4" cy="347.9" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="1158.4" y="337.9" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
-<text x="40" y="732" font-size="13" fill="#334155">初始资金 1,000,000.00 | 结束资金 1,195,080.23 | 总盈亏 +195,080.23</text>
+<g><circle cx="1151.3" cy="354.3" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2" /><text x="1159.3" y="344.3" font-size="11" font-weight="700" fill="#16a34a">BUY</text></g>
+<text x="40" y="732" font-size="13" fill="#334155">初始资金 1,000,000.00 | 结束资金 1,158,796.47 | 总盈亏 +158,796.47</text>
 </svg>

@@ -12,6 +12,9 @@ strategy:
   daily_slow_window: 20
   daily_confirm_bars: 2
   daily_trend_window: 30
+  daily_use_volume_filter: true
+  daily_volume_window: 20
+  daily_volume_multiplier: 1.1
 
 
 cost:

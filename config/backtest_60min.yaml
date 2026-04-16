@@ -12,6 +12,9 @@ strategy:
   hourly60_slow_window: 20
   hourly60_confirm_bars: 1
   hourly60_trend_window: 30
+  hourly60_use_volume_filter: true
+  hourly60_volume_window: 12
+  hourly60_volume_multiplier: 1.05
 
 cost:
   fee_bps: 1.0

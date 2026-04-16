@@ -52,10 +52,16 @@ class StrategyConfig:
     daily_slow_window: int = 20
     daily_confirm_bars: int = 2
     daily_trend_window: int = 30
+    daily_use_volume_filter: bool = False
+    daily_volume_window: int = 20
+    daily_volume_multiplier: float = 1.1
     hourly60_fast_window: int = 5
     hourly60_slow_window: int = 20
     hourly60_confirm_bars: int = 1
     hourly60_trend_window: int = 30
+    hourly60_use_volume_filter: bool = False
+    hourly60_volume_window: int = 20
+    hourly60_volume_multiplier: float = 1.05
 
 
 @dataclass(slots=True)

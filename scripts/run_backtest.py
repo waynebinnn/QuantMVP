@@ -37,6 +37,9 @@ def build_strategy(name: str, mode: str, cfg_strategy):
             slow_window=cfg_strategy.daily_slow_window,
             confirm_bars=cfg_strategy.daily_confirm_bars,
             trend_window=cfg_strategy.daily_trend_window,
+            use_volume_filter=cfg_strategy.daily_use_volume_filter,
+            volume_window=cfg_strategy.daily_volume_window,
+            volume_multiplier=cfg_strategy.daily_volume_multiplier,
         )
 
     if mode == "60min":
@@ -45,6 +48,9 @@ def build_strategy(name: str, mode: str, cfg_strategy):
             slow_window=cfg_strategy.hourly60_slow_window,
             confirm_bars=cfg_strategy.hourly60_confirm_bars,
             trend_window=cfg_strategy.hourly60_trend_window,
+            use_volume_filter=cfg_strategy.hourly60_use_volume_filter,
+            volume_window=cfg_strategy.hourly60_volume_window,
+            volume_multiplier=cfg_strategy.hourly60_volume_multiplier,
         )
 
     raise ValueError(f"Unsupported strategy mode: {mode}. Use 'daily' or '60min'.")
